@@ -1,0 +1,7 @@
+{
+  "name": "Final",
+  "description": "A voice-based AI platform that simulates a professional job interview. Get instant, detailed feedback on your performance to help you land your dream job.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
