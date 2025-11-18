@@ -13,9 +13,9 @@ dist-ssr
 *.local
 
 # Environment variables - IMPORTANT! Never commit API keys
-.env
-.env.local
-.env.*.local
+# .env - commented out to allow committing for Vercel deployment
+# .env.local
+# .env.*.local
 
 # Editor directories and files
 .vscode/*
