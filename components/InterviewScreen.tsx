@@ -643,10 +643,16 @@ Remember: Sound like a friendly colleague asking questions, not a formal intervi
       message = errorMessage;
     }
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-white p-4 sm:p-6 lg:p-8">
-            <div className="text-center">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-white p-4 sm:p-6 lg:p-8">
+            <div className="text-center w-full max-w-2xl">
                 <h2 className="text-2xl font-semibold mb-4">Interview for: <span className="font-bold text-blue-600">{jobRole}</span></h2>
-                <p className="text-gray-600 mb-8 max-w-sm">{message}</p>
+                {sessionState === 'error' ? (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8 text-left">
+                    <p className="text-gray-800 whitespace-pre-line leading-relaxed break-words">{message}</p>
+                  </div>
+                ) : (
+                  <p className="text-gray-600 mb-8">{message}</p>
+                )}
                 <button
                     onClick={handleStartSessionClick}
                     disabled={sessionState === 'starting'}
