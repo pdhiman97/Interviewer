@@ -396,9 +396,9 @@ Remember: Sound like a friendly colleague asking questions, not a formal intervi
       analyser.connect(context.destination);
 
       // Initialize chat service
-      const apiKey = (import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.GEMINI_API_KEY || import.meta.env.API_KEY) as string;
+      const apiKey = (process?.env?.GEMINI_API_KEY || process?.env?.API_KEY) as string;
       if (!apiKey) {
-        throw new Error('Gemini API key is not configured. Please ensure VITE_GEMINI_API_KEY is set in your environment variables.');
+        throw new Error('Gemini API key is not configured');
       }
       chatServiceRef.current = new GeminiChatService(apiKey, getSystemInstruction());
 
@@ -643,16 +643,10 @@ Remember: Sound like a friendly colleague asking questions, not a formal intervi
       message = errorMessage;
     }
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-white p-4 sm:p-6 lg:p-8">
-            <div className="text-center w-full max-w-2xl">
+        <div className="flex flex-col items-center justify-center h-screen bg-white p-4 sm:p-6 lg:p-8">
+            <div className="text-center">
                 <h2 className="text-2xl font-semibold mb-4">Interview for: <span className="font-bold text-blue-600">{jobRole}</span></h2>
-                {sessionState === 'error' ? (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8 text-left">
-                    <p className="text-gray-800 whitespace-pre-line leading-relaxed break-words">{message}</p>
-                  </div>
-                ) : (
-                  <p className="text-gray-600 mb-8">{message}</p>
-                )}
+                <p className="text-gray-600 mb-8 max-w-sm">{message}</p>
                 <button
                     onClick={handleStartSessionClick}
                     disabled={sessionState === 'starting'}

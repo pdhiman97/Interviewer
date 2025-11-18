@@ -1,14 +1,17 @@
 export async function transcribeAudio(audioBlob: Blob): Promise<string> {
     // Vite exposes VITE_ prefixed env vars via import.meta.env
+    // Also check process.env (defined in vite.config.ts)
     const apiKey = (
       (import.meta.env.VITE_ELEVEN_STT_API_KEY as string) ||
-      (import.meta.env.ELEVEN_STT_API_KEY as string)
+      (process?.env?.ELEVEN_STT_API_KEY as string) || 
+      ((import.meta as any).env?.ELEVEN_STT_API_KEY as string)
     )?.trim();
     
     if (!apiKey || apiKey === 'undefined' || apiKey === 'null') {
       console.error('Eleven Labs API key not found. Checked:', {
         importMetaVite: import.meta.env.VITE_ELEVEN_STT_API_KEY,
-        importMeta: import.meta.env.ELEVEN_STT_API_KEY
+        processEnv: process?.env?.ELEVEN_STT_API_KEY,
+        importMeta: (import.meta as any).env?.ELEVEN_STT_API_KEY
       });
       throw new Error('Eleven Labs API key is not configured. Please check your .env file has VITE_ELEVEN_STT_API_KEY set and restart the dev server.');
     }

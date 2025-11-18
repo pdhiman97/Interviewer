@@ -2,11 +2,7 @@ import { GoogleGenAI, Type } from '@google/genai';
 import { InterviewReport } from '../types';
 
 export const getInterviewAnalysis = async (transcript: string, jobRole: string, jobDescription?: string): Promise<InterviewReport> => {
-  const apiKey = (import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.GEMINI_API_KEY || import.meta.env.API_KEY) as string;
-  if (!apiKey) {
-    throw new Error('Gemini API key is not configured. Please ensure VITE_GEMINI_API_KEY is set in your environment variables.');
-  }
-  const ai = new GoogleGenAI({ apiKey });
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const model = 'gemini-2.5-flash';
   
   const jobDescriptionContext = jobDescription

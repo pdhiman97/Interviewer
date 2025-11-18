@@ -1,37 +1,25 @@
 export async function generateSpeech(text: string): Promise<ArrayBuffer> {
-  // Check all possible environment variable names
   const apiKey = (
     (import.meta.env.VITE_ELEVEN_STT_API_KEY as string) ||
-    (import.meta.env.ELEVEN_STT_API_KEY as string) ||
-    (import.meta.env.VITE_ELEVENLABS_API_KEY as string) ||
-    (import.meta.env.ELEVENLABS_API_KEY as string)
+    (process?.env?.ELEVEN_STT_API_KEY as string) || 
+    ((import.meta as any).env?.VITE_ELEVEN_STT_API_KEY as string)
   )?.trim();
   
-  // Debug logging - more detailed for production debugging
+  // Debug logging
   const debugInfo = {
-    hasViteElevenStt: !!import.meta.env.VITE_ELEVEN_STT_API_KEY,
-    hasElevenStt: !!import.meta.env.ELEVEN_STT_API_KEY,
-    hasViteElevenlabs: !!import.meta.env.VITE_ELEVENLABS_API_KEY,
-    hasElevenlabs: !!import.meta.env.ELEVENLABS_API_KEY,
+    hasImportMetaEnv: !!import.meta.env.VITE_ELEVEN_STT_API_KEY,
+    importMetaEnvValue: import.meta.env.VITE_ELEVEN_STT_API_KEY ? (import.meta.env.VITE_ELEVEN_STT_API_KEY as string).substring(0, 20) + '...' : 'missing',
+    hasProcessEnv: !!process?.env?.ELEVEN_STT_API_KEY,
+    processEnvValue: process?.env?.ELEVEN_STT_API_KEY ? (process.env.ELEVEN_STT_API_KEY as string).substring(0, 20) + '...' : 'missing',
     apiKeyPresent: !!apiKey,
     apiKeyLength: apiKey?.length || 0,
-    apiKeyPrefix: apiKey ? apiKey.substring(0, 10) + '...' : 'missing',
-    envMode: import.meta.env.MODE,
-    allEnvKeys: Object.keys(import.meta.env).filter(k => k.includes('ELEVEN') || k.includes('ELEVENLABS'))
+    apiKeyPrefix: apiKey ? apiKey.substring(0, 20) + '...' : 'missing',
+    apiKeySuffix: apiKey ? '...' + apiKey.substring(apiKey.length - 10) : 'missing'
   };
   console.log('Eleven Labs TTS - API Key check:', debugInfo);
   
   if (!apiKey || apiKey === 'undefined' || apiKey === 'null') {
-    const errorMsg = `Eleven Labs API key is not configured. 
-    
-Checked environment variables:
-- VITE_ELEVEN_STT_API_KEY: ${import.meta.env.VITE_ELEVEN_STT_API_KEY ? 'found' : 'missing'}
-- ELEVEN_STT_API_KEY: ${import.meta.env.ELEVEN_STT_API_KEY ? 'found' : 'missing'}
-- VITE_ELEVENLABS_API_KEY: ${import.meta.env.VITE_ELEVENLABS_API_KEY ? 'found' : 'missing'}
-- ELEVENLABS_API_KEY: ${import.meta.env.ELEVENLABS_API_KEY ? 'found' : 'missing'}
-
-Please ensure VITE_ELEVEN_STT_API_KEY is set in your Vercel environment variables and redeploy.`;
-    throw new Error(errorMsg);
+    throw new Error('Eleven Labs API key is not configured. Please ensure VITE_ELEVEN_STT_API_KEY is set in .env.local and restart the dev server.');
   }
 
   // Using "Rachel" - a natural, friendly female voice perfect for interviews

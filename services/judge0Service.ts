@@ -45,7 +45,7 @@ const JUDGE0_API_URL = 'https://judge0-ce.p.rapidapi.com';
 const getApiKey = (): string => {
   const apiKey = (
     (import.meta.env.VITE_JUDGE0_API_KEY as string) ||
-    (import.meta.env.JUDGE0_API_KEY as string) ||
+    (process?.env?.JUDGE0_API_KEY as string) ||
     '00a22cbfe8msh92dc20bfd02ccb9p127500jsn817a84b42127' // Fallback for backward compatibility
   )?.trim();
   
