@@ -1,16 +1,13 @@
 export async function generateSpeech(text: string): Promise<ArrayBuffer> {
   const apiKey = (
     (import.meta.env.VITE_ELEVEN_STT_API_KEY as string) ||
-    (process?.env?.ELEVEN_STT_API_KEY as string) || 
-    ((import.meta as any).env?.VITE_ELEVEN_STT_API_KEY as string)
+    (import.meta.env.ELEVEN_STT_API_KEY as string)
   )?.trim();
   
   // Debug logging
   const debugInfo = {
     hasImportMetaEnv: !!import.meta.env.VITE_ELEVEN_STT_API_KEY,
     importMetaEnvValue: import.meta.env.VITE_ELEVEN_STT_API_KEY ? (import.meta.env.VITE_ELEVEN_STT_API_KEY as string).substring(0, 20) + '...' : 'missing',
-    hasProcessEnv: !!process?.env?.ELEVEN_STT_API_KEY,
-    processEnvValue: process?.env?.ELEVEN_STT_API_KEY ? (process.env.ELEVEN_STT_API_KEY as string).substring(0, 20) + '...' : 'missing',
     apiKeyPresent: !!apiKey,
     apiKeyLength: apiKey?.length || 0,
     apiKeyPrefix: apiKey ? apiKey.substring(0, 20) + '...' : 'missing',

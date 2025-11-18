@@ -396,9 +396,9 @@ Remember: Sound like a friendly colleague asking questions, not a formal intervi
       analyser.connect(context.destination);
 
       // Initialize chat service
-      const apiKey = (process?.env?.GEMINI_API_KEY || process?.env?.API_KEY) as string;
+      const apiKey = (import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.GEMINI_API_KEY || import.meta.env.API_KEY) as string;
       if (!apiKey) {
-        throw new Error('Gemini API key is not configured');
+        throw new Error('Gemini API key is not configured. Please ensure VITE_GEMINI_API_KEY is set in your environment variables.');
       }
       chatServiceRef.current = new GeminiChatService(apiKey, getSystemInstruction());
 

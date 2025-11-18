@@ -41,7 +41,20 @@ export const LANGUAGE_IDS = {
 export type SupportedLanguage = keyof typeof LANGUAGE_IDS;
 
 const JUDGE0_API_URL = 'https://judge0-ce.p.rapidapi.com';
-const API_KEY = '00a22cbfe8msh92dc20bfd02ccb9p127500jsn817a84b42127';
+
+const getApiKey = (): string => {
+  const apiKey = (
+    (import.meta.env.VITE_JUDGE0_API_KEY as string) ||
+    (import.meta.env.JUDGE0_API_KEY as string) ||
+    '00a22cbfe8msh92dc20bfd02ccb9p127500jsn817a84b42127' // Fallback for backward compatibility
+  )?.trim();
+  
+  if (!apiKey || apiKey === 'undefined' || apiKey === 'null') {
+    throw new Error('Judge0 API key is not configured. Please ensure VITE_JUDGE0_API_KEY is set in your environment variables.');
+  }
+  
+  return apiKey;
+};
 
 export const executeCode = async (
   code: string,
@@ -49,6 +62,7 @@ export const executeCode = async (
   stdin?: string
 ): Promise<{ output: string; error: string | null; status: string }> => {
   const languageId = LANGUAGE_IDS[language];
+  const API_KEY = getApiKey();
 
   try {
     // Submit code
